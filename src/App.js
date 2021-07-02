@@ -21,21 +21,24 @@ class App extends Component {
       [name]: this.state[name] + 1
     }));
   };
-    
+  
+  countTotalFeedback = ()=>this.state.good + this.state.neutral + this.state.bad;
+
+  countPositiveFeedbackPercentage = ()=> Math.round((this.state.good/this.countTotalFeedback())*100);
+  
    
   render() {
     const options = Object.keys(this.state);
     const { good, neutral, bad } = this.state;
-    const total = good + neutral + bad;
-    const positivePercentage = Math.round((good / total) * 100);
+   
     return (
       <>
         <Section title={'Please leave feedback'}>
           <FeedbackOptions options={options} onLeaveFeedback={this.handleClick} />
         </Section>
         <Section title={'Statistics'}>
-          {total > 0
-            ? <Statistics good={good} neutral={neutral} bad={bad} total={total} positivePercentage={positivePercentage} />
+          {this.countTotalFeedback() 
+            ? <Statistics good={good} neutral={neutral} bad={bad} total={this.countTotalFeedback()} positivePercentage={this.countPositiveFeedbackPercentage()} />
             : < Notification message={'No feedback given'}/>}
         </Section>
         </>
